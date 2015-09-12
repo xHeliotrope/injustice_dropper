@@ -127,13 +127,13 @@ the 0 is just to pull the first record in the list as an example
 """
 #this function takes latitude and longitude coords and returns a dictionary mapping court id to full court data
 #this function is intended to be called from the front end
-def get_court_id(x,y):
+def get_court_id(lat,long):
     json_data=open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\courts.geojson.txt').read()
     
     rawData = json.loads(json_data)
     courtIdDict={}
     for courtRecord in rawData['features']:
-        if polygon_inclusion_resolver(x,y,courtRecord['geometry'])=="IN":
+        if polygon_inclusion_resolver(lat,long,courtRecord['geometry'])=="IN":
             courtIdDict[courtRecord['properties']['court_id']]=courtRecord['properties']
     return courtIdDict
 
@@ -144,4 +144,6 @@ print get_court_id(-90.2860498354983,38.8086707727844)
 print get_court_id(-90.2860498354983,38.80867077279)
 #in the indian ocean somewhere, produces an empty dict
 print get_court_id(0,0)    
+
+
         

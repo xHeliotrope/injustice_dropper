@@ -165,8 +165,8 @@ def get_analytics_raw(courtName):
     for courtRecord in rawData['features']:
         for key in courtRecord['properties']:
             #record data for the specific court when appropriate
-            if courtName.lower()==courtRecord['properties'][key].lower():
-                specificCourt=courtRecord['properties'][key]
+            if courtName.lower()==courtRecord['properties']['court_name'].lower():
+                specificCourt=courtRecord['properties']
             if key not in courtKeys:
                 courtKeys[key]={'total':0,'sum':0,'type':type(courtRecord['properties'][key]),'masterList':[]}
             courtKeys[key]['masterList'].append(courtRecord['properties'][key])
@@ -177,10 +177,23 @@ def get_analytics_raw(courtName):
             except ValueError:
                 'do nothing'
     comparisons={}
-    for key in specficCourt:
-        if courtKeys[key]:
-            comparisons[key]={'userValue':specificCourt[key]}            
+    for key in specificCourt:
+        try:
+            if float(courtKeys[key]['sum'])!=0 and float(courtKeys[key]['total'])!=0:
+                comparisons[key]={
+                    'userValue':specificCourt[key],
+                    'average':float(courtKeys[key]['sum'])/courtKeys[key]['total'],
+                    'percentDiff':(float(specificCourt[key])-float(courtKeys[key]['sum'])/courtKeys[key]['total'])/(float(courtKeys[key]['sum'])/courtKeys[key]['total'])
+                }  
+            else:
+                comparisons[key]={
+                    'userValue':specificCourt[key],
+                    'average':0,
+                    'percentDiff':0
+                }  
+        except ValueError:
+                'do nothing'                    
     
-    return courtKeys
+    return {'comparisons':comparisons,'allData':courtKeys}
     
-#print get_analytics_raw('country club hills')
+print get_analytics_raw('country club hills')['comparisons']

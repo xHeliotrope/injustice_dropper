@@ -136,17 +136,43 @@ def get_court_id(lat,long):
     rawData = json.loads(json_data)
     courtIdDict={}
     for courtRecord in rawData['features']:
-        if polygon_inclusion_resolver(lat,long,courtRecord['geometry'])=="IN":
+        #the code needs lat and long to be flipped because it was written in the middle of the night
+        if polygon_inclusion_resolver(long,lat,courtRecord['geometry'])=="IN":
             courtIdDict[courtRecord['properties']['court_id']]=courtRecord['properties']
     return courtIdDict
 
 #this is a demonstrative test of a front end function      
 #on the boundary of florissant and unincorpated county        
-print get_court_id(-90.2860498354983,38.8086707727844)    
+print get_court_id(38.8086707727844,-90.2860498354983)    
 #just unincorporated county
-print get_court_id(-90.2860498354983,38.80867077279)
+print get_court_id(38.80867077279,-90.2860498354983)
+#the vinita terrace courthouse
+print get_court_id(38.685607,-90.329282)
 #in the indian ocean somewhere, produces an empty dict
 print get_court_id(0,0)    
 
-
-        
+def get_analytics_raw(courtName):
+    #get the raw court data from geojson    
+    json_data=open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\courts.geojson.txt').read()
+    rawData = json.loads(json_data)
+    #a big list of all possible court data with summary data
+    courtKeys={}
+    for courtRecord in rawData['features']:
+        for key in courtRecord['properties']:
+            #record data for the specific court when appropriate
+            if courtName.lower()==courtRecord['properties'][key].lower():
+                specificCourt=courtRecord['properties'][key]
+            if key not in courtKeys:
+                courtKeys[key]={'total':0,'sum':0,'type':type(courtRecord['properties'][key]),'masterList':[]}
+            courtKeys[key]['masterList'].append(courtRecord['properties'][key])
+            try:
+                floatValue=float(courtRecord['properties'][key])
+                courtKeys[key]['total']+=1
+                courtKeys[key]['sum']+=floatValue
+            except ValueError:
+                'do nothing'
+                
+    
+    return courtKeys
+    
+print get_analytics_raw('country club hills')

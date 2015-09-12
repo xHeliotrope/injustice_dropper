@@ -37,7 +37,7 @@ def get_record_csv(requiredFields,targetData):
     if type(requiredFields)!=dict:
         return 'The required fields (the first function argument) must be in dictionary format'
     #targetData must be 'citations' on 'violations'
-    if targetData!='citations' and targetData!='violations':
+    if targetData!='citations' and targetData!='violations' and targetData!='Warrants':
         return 'The targeted dataset (the second function argument) is invalid'
     #going to need to do something different with the path
     with open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\\'+targetData+'.csv', 'rb') as citations:
@@ -54,6 +54,11 @@ testPositive={'violation_number': '682690971-01', 'violation_description': 'Impr
 testNegative={'violation_number': '12345', 'violation_description': 'dookie'}
 print get_record_csv(testPositive,'violations')
 print get_record_csv(testNegative,'violations')       
+
+testPositive={'Defendant': 'AARON, ANDRE L', 'ZIP Code': '63103'}
+testNegative={'Defendant': 'AARON, BOOTY L', 'ZIP Code': '99999'}
+print get_record_csv(testPositive,'Warrants')
+print get_record_csv(testNegative,'Warrants')       
 
 #this is a helper function not intended to be called by the front end
 #this function formats inputs for point_in_poly
@@ -171,8 +176,11 @@ def get_analytics_raw(courtName):
                 courtKeys[key]['sum']+=floatValue
             except ValueError:
                 'do nothing'
-                
+    comparisons={}
+    for key in specficCourt:
+        if courtKeys[key]:
+            comparisons[key]={'userValue':specificCourt[key]}            
     
     return courtKeys
     
-print get_analytics_raw('country club hills')
+#print get_analytics_raw('country club hills')

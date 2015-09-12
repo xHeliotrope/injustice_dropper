@@ -1,7 +1,27 @@
 import csv
 import json
+    
+#this is a helper function intended to be called by another function making a data call that produces a (pseudo) list of dictionaries    
+def match_in_list(requiredFields,pseudoList):
+    matches=[]
+    for citationDict in pseudoList:
+        #default is no match
+        match=0
+        for key in requiredFields.keys():
+            if requiredFields[key]==citationDict[key]:
+                match=1
+            else:
+                match=0
+        if match==1:
+            matches.append(citationDict)
+    if len(matches)>0:
+        return matches
+    else:
+        return "No match was found!"
 
-def get_citation_record(requiredFields,targetData):
+#this function is an example of a type intended to be called from the front end
+#this function will be superseded by a similar one which makes a database call  
+def get_citation_record_csv(requiredFields,targetData):        
     if type(requiredFields)!=dict:
         return 'The required fields (the first function argument) must be in dictionary format'
     #targetData must be 'citations' on 'violations'
@@ -10,33 +30,49 @@ def get_citation_record(requiredFields,targetData):
     #going to need to do something different with the path
     with open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\\'+targetData+'.csv', 'rb') as citations:
         reader = csv.DictReader(citations)
-        for citationDict in reader:
-            #default is no match
-            match=0
-            for key in requiredFields.keys():
-                if requiredFields[key]==citationDict[key]:
-                    match=1
-                else:
-                    match=0
-            if match==1:
-                return citationDict
-        return "No match was found!"
-        
+        return match_in_list(requiredFields,reader)    
+
+#this is a demonstrative test of a front end function        
 testPositive={'court_address': '7150 Natural Bridge Road', 'first_name': 'Kathleen'}
 testNegative={'court_address': 'ass road', 'first_name': 'assface'}
-print get_citation_record(testPositive,'citations')
-print get_citation_record(testNegative,'citations')        
+print get_citation_record_csv(testPositive,'citations')
+print get_citation_record_csv(testNegative,'citations')        
 
 testPositive={'violation_number': '682690971-01', 'violation_description': 'Improper Passing'}
 testNegative={'violation_number': '12345', 'violation_description': 'dookie'}
-print get_citation_record(testPositive,'violations')
-print get_citation_record(testNegative,'violations')        
+print get_citation_record_csv(testPositive,'violations')
+print get_citation_record_csv(testNegative,'violations')       
 
+#this is a helper function not intended to be called by the front end
+#this function formats inputs for point_in_poly
+def polygon_reformat(polyListCoords):
+    return [(t[0],t[1]) for t in polyListCoords]
+
+#polygon vs multi polygon key is in the same layer as coordinates
+#this function deals with some issues related to non simply connected multipolygons
+#this is a helper function not intended to be called by the front end
+def polygon_inclusion_resolver(x,y,geometryDict):
+    if geometryDict['type']=='Polygon':
+        cleanedList=[polygon_reformat(geometryDict['coordinates'][0])]
+    if geometryDict['type']=='MultiPolygon':
+        cleanedList=[]
+        for polygon in geometryDict['coordinates'][0]:
+            cleanedList.append(polygon_reformat(polygon)) 
+    #count how many polygons the point is contained in from the list    
+   
+    containedCount=0
+    for i,polygonList in enumerate(cleanedList):
+        if point_in_poly(x,y,polygonList)=="IN":
+            containedCount+=1
+    if containedCount%2==1:
+        return "IN"
+    else:
+        return "OUT"
+                    
+        
 #poly is a list of (x,y) tuples
-def point_in_poly(x,y,polyByList):
-
-   poly=[(t[0],t[1]):t in polyByList]
-
+#this is a helper function not intended to be called by the front end
+def point_in_poly(x,y,poly):
 
    # check if point is a vertex
    if (x,y) in poly: return "IN"
@@ -72,24 +108,31 @@ def point_in_poly(x,y,polyByList):
    if inside: return "IN"
    else: return "OUT"
 
-# Test a vertex for inclusion
-poligono = [(-33.416032,-70.593016), (-33.415370,-70.589604),
-(-33.417340,-70.589046), (-33.417949,-70.592351),
-(-33.416032,-70.593016)]
-lat= -33.416032
-lon= -70.593016
+"""
+example key structure to get to the actual list of coordinates
+test['features'][0]['geometry']['coordinates'][0]
+example key structure to get to court properties
+test['features'][0]['properties']
 
-print point_in_poly(lat, lon, poligono)
-
-# test a boundary point for inclusion
-poly2 = [(1,1), (5,1), (5,5), (1,5), (1,1)]
-x = 3
-y = 1
-print point_in_poly(x, y, poly2)
-
+the 0 is just to pull the first record in the list as an example
+"""
+#this function takes latitude and longitude coords and returns a dictionary mapping court id to full court data
+#this function is intended to be called from the front end
 def get_court_id(x,y):
     json_data=open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\courts.geojson.txt').read()
     
-    data = json.loads(json_data)    
+    rawData = json.loads(json_data)
+    courtIdDict={}
+    for courtRecord in rawData['features']:
+        if polygon_inclusion_resolver(x,y,courtRecord['geometry'])=="IN":
+            courtIdDict[courtRecord['properties']['court_id']]=courtRecord['properties']
+    return courtIdDict
 
-    return data                                
+#this is a demonstrative test of a front end function      
+#on the boundary of florissant and unincorpated county        
+print get_court_id(-90.2860498354983,38.8086707727844)    
+#just unincorporated county
+print get_court_id(-90.2860498354983,38.80867077279)
+#in the indian ocean somewhere, produces an empty dict
+print get_court_id(0,0)    
+        

@@ -4,6 +4,9 @@ the functions
     get_court_id
 are intended to be the closest interface points with the front end.
 each has comments on its function prior to its definition and a series of demonstrative example calls afterwards
+
+get_records_csv will require some changes to work with a db - it has been written to hopefully make this easy
+get_court_id will eventually need a change to its file path on line 134
 """
 
 

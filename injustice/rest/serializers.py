@@ -13,7 +13,9 @@ class ViolationSerializer(serializers.ModelSerializer):
         resource_name = 'violations'
 
 class CitationViolationSerializer(serializers.ModelSerializer):
-    violations = ViolationSerializer(many=True)
+    violations = ViolationSerializer(many=True, read_only=True)
+
     class Meta:
         model = Citations
         resource_name = 'citations'
+        fields = ('citation_date', 'first_name', 'last_name', 'date_of_birth', 'defendant_address', 'defendant_city', 'defendant_state', 'drivers_license_number', 'court_date', 'court_location', 'court_address', 'violations')

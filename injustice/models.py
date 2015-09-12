@@ -12,8 +12,8 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Citations(models.Model):
-    id = models.IntegerField(primary_key=True)
-    citation_number = models.BigIntegerField(blank=True, null=True)
+    id = models.IntegerField()
+    citation_number = models.BigIntegerField(primary_key=True)
     citation_date = models.DateField(blank=True, null=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
@@ -32,7 +32,7 @@ class Citations(models.Model):
 
 class Violations(models.Model):
     id = models.IntegerField(primary_key=True)
-    citation_number = models.BigIntegerField(blank=True, null=True)
+    citation_number = models.ForeignKey(Citations, db_column='citation_number', blank=True, null=True)
     violation_number = models.CharField(max_length=200, blank=True, null=True)
     violation_description = models.CharField(max_length=500, blank=True, null=True)
     warrant_status = models.NullBooleanField()

@@ -12,6 +12,7 @@ get_court_id will eventually need a change to its file path on line 134
 
 import csv
 import json
+import os
     
 #this is a helper function intended to be called by another function making a data call that produces a (pseudo) list of dictionaries    
 def match_in_list(requiredFields,pseudoList):
@@ -136,7 +137,7 @@ the 0 is just to pull the first record in the list as an example
 #this function takes latitude and longitude coords and returns a dictionary mapping court id to full court data
 #this function is intended to be called from the front end
 def get_court_id(lat,long):
-    json_data=open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\courts.geojson.txt').read()
+    json_data=open(os.getcwd() + '/data/courts.geojson.txt').read()
     
     rawData = json.loads(json_data)
     courtIdDict={}
@@ -158,7 +159,7 @@ print get_court_id(0,0)
 
 def get_analytics_raw(courtName):
     #get the raw court data from geojson    
-    json_data=open('C:\Users\Alexander\Documents\GitHub\injustice_dropper\data\courts.geojson.txt').read()
+    json_data=open(os.getcwd() + '/data/courts.geojson.txt').read()
     rawData = json.loads(json_data)
     #a big list of all possible court data with summary data
     courtKeys={}

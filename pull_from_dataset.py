@@ -12,7 +12,11 @@ get_court_id will eventually need a change to its file path on line 134
 
 import csv
 import json
+<<<<<<< HEAD
 import os
+=======
+import itertools
+>>>>>>> f8f2d3c1b709b0888c248bba74e2b20bfc553ec3
     
 #this is a helper function intended to be called by another function making a data call that produces a (pseudo) list of dictionaries    
 def match_in_list(requiredFields,pseudoList):
@@ -48,18 +52,18 @@ def get_record_csv(requiredFields,targetData):
 #this is a demonstrative test of a front end function        
 testPositive={'court_address': '7150 Natural Bridge Road', 'first_name': 'Kathleen'}
 testNegative={'court_address': 'ass road', 'first_name': 'assface'}
-print get_record_csv(testPositive,'citations')
-print get_record_csv(testNegative,'citations')        
+print(get_record_csv(testPositive,'citations'))
+print(get_record_csv(testNegative,'citations'))        
 
 testPositive={'violation_number': '682690971-01', 'violation_description': 'Improper Passing'}
 testNegative={'violation_number': '12345', 'violation_description': 'dookie'}
-print get_record_csv(testPositive,'violations')
-print get_record_csv(testNegative,'violations')       
+print(get_record_csv(testPositive,'violations'))
+print(get_record_csv(testNegative,'violations'))       
 
 testPositive={'Defendant': 'AARON, ANDRE L', 'ZIP Code': '63103'}
 testNegative={'Defendant': 'AARON, BOOTY L', 'ZIP Code': '99999'}
-print get_record_csv(testPositive,'Warrants')
-print get_record_csv(testNegative,'Warrants')       
+print(get_record_csv(testPositive,'Warrants'))
+print(get_record_csv(testNegative,'Warrants'))       
 
 #this is a helper function not intended to be called by the front end
 #this function formats inputs for point_in_poly
@@ -149,13 +153,13 @@ def get_court_id(lat,long):
 
 #this is a demonstrative test of a front end function      
 #on the boundary of florissant and unincorpated county        
-print get_court_id(38.8086707727844,-90.2860498354983)    
+print(get_court_id(38.8086707727844,-90.2860498354983))    
 #just unincorporated county
-print get_court_id(38.80867077279,-90.2860498354983)
+print(get_court_id(38.80867077279,-90.2860498354983))
 #the vinita terrace courthouse
-print get_court_id(38.685607,-90.329282)
+print(get_court_id(38.685607,-90.329282))
 #in the indian ocean somewhere, produces an empty dict
-print get_court_id(0,0)    
+print(get_court_id(0,0))    
 
 def get_analytics_raw(courtName):
     #get the raw court data from geojson    
@@ -197,4 +201,18 @@ def get_analytics_raw(courtName):
     
     return {'comparisons':comparisons,'allData':courtKeys}
     
-print get_analytics_raw('country club hills')['comparisons']
+print(get_analytics_raw('country club hills')['comparisons'])
+
+def name_input_permuter(nameString):
+    tallWords=[]
+    for preWord in nameString.split():
+        for word in preWord.split(','):
+            tallWords.append(word)
+    finalOutput={'firstLast':[],'libraryStyle':[]}
+    for t in itertools.permutations(tallWords,3):
+        finalOutput['firstLast'].append((t[0],t[1]))
+        finalOutput['libraryStyle'].append(t[0]+','+t[1]+' '+t[2][0])
+            
+    return finalOutput
+    
+    

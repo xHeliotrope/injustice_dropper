@@ -1,3 +1,12 @@
+"""
+the functions
+    get_record_csv
+    get_court_id
+are intended to be the closest interface points with the front end.
+each has comments on its function prior to its definition and a series of demonstrative example calls afterwards
+"""
+
+
 import csv
 import json
     
@@ -21,7 +30,7 @@ def match_in_list(requiredFields,pseudoList):
 
 #this function is an example of a type intended to be called from the front end
 #this function will be superseded by a similar one which makes a database call  
-def get_citation_record_csv(requiredFields,targetData):        
+def get_record_csv(requiredFields,targetData):        
     if type(requiredFields)!=dict:
         return 'The required fields (the first function argument) must be in dictionary format'
     #targetData must be 'citations' on 'violations'
@@ -35,13 +44,13 @@ def get_citation_record_csv(requiredFields,targetData):
 #this is a demonstrative test of a front end function        
 testPositive={'court_address': '7150 Natural Bridge Road', 'first_name': 'Kathleen'}
 testNegative={'court_address': 'ass road', 'first_name': 'assface'}
-print get_citation_record_csv(testPositive,'citations')
-print get_citation_record_csv(testNegative,'citations')        
+print get_record_csv(testPositive,'citations')
+print get_record_csv(testNegative,'citations')        
 
 testPositive={'violation_number': '682690971-01', 'violation_description': 'Improper Passing'}
 testNegative={'violation_number': '12345', 'violation_description': 'dookie'}
-print get_citation_record_csv(testPositive,'violations')
-print get_citation_record_csv(testNegative,'violations')       
+print get_record_csv(testPositive,'violations')
+print get_record_csv(testNegative,'violations')       
 
 #this is a helper function not intended to be called by the front end
 #this function formats inputs for point_in_poly

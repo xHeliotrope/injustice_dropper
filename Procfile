@@ -1,1 +1,1 @@
-web: gunicorn injustice.wsgi --log-file -
+web: gunicorn django_injustice.wsgi --log-file -

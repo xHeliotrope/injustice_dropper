@@ -4,6 +4,16 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest.serializers import *
 
+class CitationByLocation(generics.ListCreateAPIView):
+    """
+    API endpoint that list citations by coordinates
+    """
+    serializer_class = CitationViolationSerializer
+
+    def get_queryset(self):
+        
+
+
 class CitationList(generics.ListCreateAPIView):
     """
     API endpoint that lists citations (for testing only)

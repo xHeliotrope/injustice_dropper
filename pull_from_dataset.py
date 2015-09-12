@@ -12,6 +12,7 @@ get_court_id will eventually need a change to its file path on line 134
 
 import csv
 import json
+import itertools
     
 #this is a helper function intended to be called by another function making a data call that produces a (pseudo) list of dictionaries    
 def match_in_list(requiredFields,pseudoList):
@@ -197,3 +198,17 @@ def get_analytics_raw(courtName):
     return {'comparisons':comparisons,'allData':courtKeys}
     
 print get_analytics_raw('country club hills')['comparisons']
+
+def name_input_permuter(nameString):
+    tallWords=[]
+    for preWord in nameString.split():
+        for word in preWord.split(','):
+            tallWords.append(word)
+    finalOutput={'firstLast':[],'libraryStyle':[]}
+    for t in itertools.permutations(tallWords,3):
+        finalOutput['firstLast'].append((t[0],t[1]))
+        finalOutput['libraryStyle'].append(t[0]+','+t[1]+' '+t[2][0])
+            
+    return finalOutput
+    
+    

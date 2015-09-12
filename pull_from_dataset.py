@@ -48,18 +48,18 @@ def get_record_csv(requiredFields,targetData):
 #this is a demonstrative test of a front end function        
 testPositive={'court_address': '7150 Natural Bridge Road', 'first_name': 'Kathleen'}
 testNegative={'court_address': 'ass road', 'first_name': 'assface'}
-print get_record_csv(testPositive,'citations')
-print get_record_csv(testNegative,'citations')        
+print(get_record_csv(testPositive,'citations'))
+print(get_record_csv(testNegative,'citations'))        
 
 testPositive={'violation_number': '682690971-01', 'violation_description': 'Improper Passing'}
 testNegative={'violation_number': '12345', 'violation_description': 'dookie'}
-print get_record_csv(testPositive,'violations')
-print get_record_csv(testNegative,'violations')       
+print(get_record_csv(testPositive,'violations'))
+print(get_record_csv(testNegative,'violations'))       
 
 testPositive={'Defendant': 'AARON, ANDRE L', 'ZIP Code': '63103'}
 testNegative={'Defendant': 'AARON, BOOTY L', 'ZIP Code': '99999'}
-print get_record_csv(testPositive,'Warrants')
-print get_record_csv(testNegative,'Warrants')       
+print(get_record_csv(testPositive,'Warrants'))
+print(get_record_csv(testNegative,'Warrants'))       
 
 #this is a helper function not intended to be called by the front end
 #this function formats inputs for point_in_poly
@@ -149,13 +149,13 @@ def get_court_id(lat,long):
 
 #this is a demonstrative test of a front end function      
 #on the boundary of florissant and unincorpated county        
-print get_court_id(38.8086707727844,-90.2860498354983)    
+print(get_court_id(38.8086707727844,-90.2860498354983))    
 #just unincorporated county
-print get_court_id(38.80867077279,-90.2860498354983)
+print(get_court_id(38.80867077279,-90.2860498354983))
 #the vinita terrace courthouse
-print get_court_id(38.685607,-90.329282)
+print(get_court_id(38.685607,-90.329282))
 #in the indian ocean somewhere, produces an empty dict
-print get_court_id(0,0)    
+print(get_court_id(0,0))    
 
 def get_analytics_raw(courtName):
     #get the raw court data from geojson    
@@ -197,7 +197,7 @@ def get_analytics_raw(courtName):
     
     return {'comparisons':comparisons,'allData':courtKeys}
     
-print get_analytics_raw('country club hills')['comparisons']
+print(get_analytics_raw('country club hills')['comparisons'])
 
 def name_input_permuter(nameString):
     tallWords=[]

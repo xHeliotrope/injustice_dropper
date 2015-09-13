@@ -23,10 +23,10 @@ def match_in_list(requiredFields,pseudoList):
     matches=[]
     for citationDict in pseudoList:
         #default is no match
-        match=0
+        match=1
         for key in requiredFields.keys():
             if requiredFields[key]==citationDict[key]:
-                match=1
+                "nothing happens"
             else:
                 match=0
         if match==1:

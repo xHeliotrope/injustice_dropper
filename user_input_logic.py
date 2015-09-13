@@ -1,15 +1,33 @@
 import itertools
 from pull_from_dataset_sandbox import *
+import string
 
 """could add some more thorough splitting to deal with punctuation"""
 
+def max_split(sentence):
+    oldWords=[sentence]
+    for mark in " "+string.punctuation:
+        print(oldWords)
+        if mark not in '-\/':
+            print(mark)
+            newWords=[]
+            for word in oldWords:
+                newWords=newWords+word.split(mark)
+                print(newWords)
+            oldWords=newWords
+    #clean out the emptry string
+    output=[]
+    for t in oldWords:
+        if t!='':
+            output.append(t)
+    print(output)
+    return output
+        
+
 def inputted_name_permuter(nameString):
-    tallWords=[]
-    for preWord in nameString.split():
-        for word in preWord.split(','):
-            tallWords.append(word)
     finalOutput={'firstLast':[],'libraryStyle':[]}
-    for t in itertools.permutations(tallWords,3):
+    print(max_split(nameString))
+    for t in itertools.permutations(max_split(nameString),3):
         finalOutput['firstLast'].append({'first_name':t[0],'last_name':t[1]})
         finalOutput['libraryStyle'].append({'defendant':t[0]+', '+t[1]+' '+t[2][0]})
             
@@ -23,7 +41,7 @@ def get_citation_names():
     return [{'first_name':'mildred','last_name':'collins'}]    
 
 def verify_name(nameString,recordType):
-    nameString=nameString.lower()
+    nameString=max_split(nameString)
     if recordType=='Warrants':
         namesToCheck=get_warrant_names()
         potentialNames=inputted_name_permuter(nameString)['libraryStyle']
@@ -45,12 +63,12 @@ def verify_name(nameString,recordType):
     else:
         return 0
             
-#print(verify_name('my aaron name is andre you l','Warrants'))
-#print(verify_name('collins asks what is a mildred','citation'))
+print(verify_name('my aaron name is andre you l','Warrants'))
+print(verify_name('collins asks what is a mildred','citation'))
 
 #format of name will need to vary with record type
 def verify_second_factor(name,response,targetedField,recordType):
-    responseWords=response.split()
+    responseWords=max_split(response)
     for word in responseWords:
         #needs to be changed away from csv format at some point
         if recordType=='Warrants':
@@ -66,13 +84,15 @@ def verify_second_factor(name,response,targetedField,recordType):
             }
         else:
             return "Invalid record type"
-        #see if any appropriate records exist    
+        #see if any appropriate records exist
         records=get_record_csv(queryDict,recordType)
         if type(records)!=str:
             return "VERIFIED"
     return "NO MATCH FOUND"
     
-#print(verify_second_factor("AARON, ANDRE L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
-#print(verify_second_factor("AARON, ANDREz L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
-#print(verify_second_factor({'first_name':'Mildred','last_name':'Collins'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))         
-print(verify_second_factor({'first_name':'Mildred','last_name':'buttwater'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))                 
+print(verify_second_factor("AARON, ANDRE L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
+print(verify_second_factor("AARON, ANDREz L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
+print(verify_second_factor({'first_name':'Mildred','last_name':'Collins'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))         
+print(verify_second_factor({'first_name':'Mildred','last_name':'buttwater'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))
+
+               

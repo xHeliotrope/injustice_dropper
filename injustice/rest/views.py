@@ -18,10 +18,10 @@ import django_twilio.request as dt
 def received_message(request):
     client = TwilioRestClient()
 
-    body = request.REQUEST.get('Body', None)
-    from_number = request.REQUEST.get('From', None)
+    body = request.REQUEST['Body']
+    from_number = request.REQUEST['From']
 
-    client.sms.messages.create(to=from_number, from_="+14155992671", body="Gotcha message, d-boi!") 
+    client.sms.messages.create(to=from_number, from_="+14155992671", body=body) 
 
 class WarrantsByName(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)

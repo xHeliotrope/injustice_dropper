@@ -13,6 +13,7 @@ from twilio.rest import TwilioRestClient
 from django_twilio.decorators import twilio_view
 import django_twilio.request as dt
 
+@csrf_exempt
 @twilio_view
 @require_http_methods(["POST"])
 def received_message(request):

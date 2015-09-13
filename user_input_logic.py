@@ -1,5 +1,5 @@
 import itertools
-from pull_from_dataset import *
+from pull_from_dataset_sandbox import *
 
 """could add some more thorough splitting to deal with punctuation"""
 
@@ -74,5 +74,5 @@ def verify_second_factor(name,response,targetedField,recordType):
     
 #print(verify_second_factor("AARON, ANDRE L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
 #print(verify_second_factor("AARON, ANDREz L","when I fart my dob is 07/22/1983","Date of Birth",'Warrants')) 
-print(verify_second_factor({'first_name':'Mildred','last_name':'Collins'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))         
-        
+#print(verify_second_factor({'first_name':'Mildred','last_name':'Collins'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))         
+print(verify_second_factor({'first_name':'Mildred','last_name':'buttwater'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))                 

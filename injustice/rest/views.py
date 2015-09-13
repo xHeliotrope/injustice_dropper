@@ -18,8 +18,8 @@ import django_twilio.request as dt
 def received_message(request):
     client = TwilioRestClient()
 
-    body = request.REQUEST['Body']
-    from_number = request.REQUEST['From']
+    body = request.POST.get('Body', '')
+    from_number = request.POST.get('From', '')
 
     client.sms.messages.create(to=from_number, from_="+14155992671", body=body) 
 

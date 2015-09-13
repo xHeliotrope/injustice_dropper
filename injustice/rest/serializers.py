@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from rest.models import Citations
-from rest.models import Violations
+from rest.models import *
 
 class CourtSerializer(serializers.Serializer):
     class Meta:
@@ -15,6 +14,11 @@ class ViolationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Violations
         resource_name = 'violations'
+
+class WarrantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Warrants
+        resource_name = 'warrants'
 
 class CitationViolationSerializer(serializers.ModelSerializer):
     violations = ViolationSerializer(many=True, read_only=True)

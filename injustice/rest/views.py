@@ -21,6 +21,16 @@ def received_message(request):
 
     client.sms.messages.create(to=from_, from_="+14155992671", body="Gotcha message, d-boi!") 
 
+class WarrantsByCaseNumber(generics.ListCreateAPIView):
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = WarrantSerializer
+
+    def get_queryset(self):
+        number = str(self.kwargs['case_number'])
+
+        if number is not None:
+            return Warrants.objects.filter(case_number=number)
+
 class ViolationByCitationNumber(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)
     serializer_class = ViolationSerializer

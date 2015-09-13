@@ -35,3 +35,14 @@ class Violations(models.Model):
     class Meta:
         managed = False
         db_table = 'violations'
+
+class Warrants(models.Model):
+    defendant = models.CharField(max_length=200, blank=True, null=True)
+    zip_code = models.CharField(max_length=5, blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    case_number = models.CharField(max_length=20, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'warrants'

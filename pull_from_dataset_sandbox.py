@@ -176,7 +176,7 @@ def get_analytics_raw(courtName):
                 courtKeys[key]={'total':0,'sum':0,'type':type(courtRecord['properties'][key]),'masterList':[]}
             courtKeys[key]['masterList'].append(courtRecord['properties'][key])
             try:
-                floatValue=float(courtRecord['properties'][key])
+                floatValue=float(courtRecord['properties'][key].replace(",",""))
                 courtKeys[key]['total']+=1
                 courtKeys[key]['sum']+=floatValue
             except ValueError:

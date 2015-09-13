@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^courts/(?P<address>.+)$', CourtByAddress.as_view()),
     url(r'^courts/(?P<lat>.+),(?P<lng>.+)$', CourtByLocation.as_view()),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^message$', message_me),
 ]

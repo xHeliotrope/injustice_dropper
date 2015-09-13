@@ -74,3 +74,5 @@ fi
 if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
     hash -r
 fi
+export TWILIO_ACCOUNT_SID=ACf14ecf8687dc3ddfa9d547a1ee41ff1f
+export TWILIO_AUTH_TOKEN=28fd2f251a8f881e4b4cddc8f03de55b

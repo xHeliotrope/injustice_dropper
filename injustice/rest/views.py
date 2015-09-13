@@ -6,6 +6,14 @@ from rest.serializers import *
 from rest.renderers import *
 from rest.filters import *
 from rest.converters import *
+from twilio import twiml
+from django_twilio.decorators import twilio_view
+
+@twilio_view
+def message_me(request):
+    r = twiml.Response()
+    r.say('Hey bubs')
+    return r 
 
 class CourtByAddress(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)

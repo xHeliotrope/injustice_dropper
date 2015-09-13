@@ -25,12 +25,12 @@ sys.path.append('injustice')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'nxo-93g39#6ie!+%dzabm!mw)%%x^^ln#4e-0rl-+qpxvbh9$9'
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition

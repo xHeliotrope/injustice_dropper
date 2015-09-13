@@ -7,13 +7,18 @@ from rest.renderers import *
 from rest.filters import *
 from rest.converters import *
 from twilio import twiml
+from twilio.rest import TwilioRestClient
 from django_twilio.decorators import twilio_view
+import django_twilio.request as dt
 
 @twilio_view
-def message_me(request):
-    r = twiml.Response()
-    r.say('Hey bubs')
-    return r 
+def received_message(request):
+    client = TwilioRestClient()
+    twilio_request = dt.decompose(request)
+
+    from_ = twilio_request.from_
+
+    client.sms.messages.create(to=from_, from_'+14155992671", body="Gotcha message, d-boi!") 
 
 class CourtByAddress(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)

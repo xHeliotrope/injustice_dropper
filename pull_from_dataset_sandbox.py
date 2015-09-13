@@ -167,6 +167,7 @@ def get_analytics_raw(courtName):
     rawData = json.loads(json_data)
     #a big list of all possible court data with summary data
     courtKeys={}
+    courtNames=[]
     for courtRecord in rawData['features']:
         for key in courtRecord['properties']:
             #record data for the specific court when appropriate
@@ -176,9 +177,11 @@ def get_analytics_raw(courtName):
                 courtKeys[key]={'total':0,'sum':0,'type':type(courtRecord['properties'][key]),'masterList':[]}
             courtKeys[key]['masterList'].append(courtRecord['properties'][key])
             try:
-                floatValue=float(courtRecord['properties'][key].replace(",",""))
-                courtKeys[key]['total']+=1
-                courtKeys[key]['sum']+=floatValue
+                if courtRecord['court_name'] not in courtNames:
+                    floatValue=float(courtRecord['properties'][key].replace(",",""))
+                    courtKeys[key]['total']+=1
+                    courtKeys[key]['sum']+=floatValue
+                    courtNames.append(courtRecord['court_name'])
             except ValueError:
                 'do nothing'
     comparisons={}

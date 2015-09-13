@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 from django.db.models import Q, CharField
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAdminUser
@@ -13,6 +14,7 @@ from django_twilio.decorators import twilio_view
 import django_twilio.request as dt
 
 @twilio_view
+@require_http_methods(["POST"])
 def received_message(request):
     client = TwilioRestClient()
 

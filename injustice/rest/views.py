@@ -6,6 +6,24 @@ from rest.serializers import *
 from rest.renderers import *
 from rest.filters import *
 
+class CourtByLocation(generics.ListCreateAPIView):
+    """
+    API endpoing that returns a court for a set of coordinates
+    """
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = CourtSerializer
+
+    def get(self, request, *args, **kwargs):
+        lat = float(self.kwargs['lat'])
+        lng = float(self.kwargs['lng'])
+
+        if lat is not None and lng is not None:
+            court = get_court_id(lat, lng)
+
+            if court != {}:
+                response = Response(court, status=status.HTTP_200_OK)
+                return response
+
 class CitationByLocation(generics.ListCreateAPIView):
     """
     API endpoint that list citations by coordinates

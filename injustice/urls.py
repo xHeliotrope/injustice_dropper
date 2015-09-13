@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^violations$', ViolationList.as_view()),
     url(r'^citationviolations$', CitationViolationList.as_view()),
     url(r'^citationviolations/(?P<lat>.+),(?P<lng>.+)$', CitationByLocation.as_view()),
+    url(r'^courts/(?P<lat>.+),(?P<lng>.+)$', CourtByLocation.as_view()),
     url(r'^admin/', include(admin.site.urls)),
 ]

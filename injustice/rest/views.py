@@ -5,10 +5,30 @@ from rest_framework.response import Response
 from rest.serializers import *
 from rest.renderers import *
 from rest.filters import *
+from rest.converters import *
+
+class CourtByAddress(generics.ListCreateAPIView):
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = CourtSerializer
+
+    def get(self, request, *args, **kwargs):
+        address = str(self.kwargs['address'])
+
+        if address is not None:
+            coords = address_to_coords(address)
+            lat = coords['lat']
+            lng = coords['lng']
+
+            court = get_court_id(lat, lng)
+
+            if court != {}:
+                response = Response(court, status=status.HTTP_200_OK)
+                if response is not None: 
+                    return response 
 
 class CourtByLocation(generics.ListCreateAPIView):
     """
-    API endpoing that returns a court for a set of coordinates
+    API endpoint that returns a court for a set of coordinates
     """
     renderer_classes = (CustomJSONRenderer,)
     serializer_class = CourtSerializer

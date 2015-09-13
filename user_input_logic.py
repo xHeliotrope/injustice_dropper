@@ -16,7 +16,7 @@ def max_split(sentence):
     output=[]
     for t in oldWords:
         if t!='':
-            output.append(t)
+            output.append(t.lower())
     return output
         
 
@@ -89,3 +89,22 @@ print(verify_second_factor("AARON, ANDREz L","when I fart my dob is 07/22/1983",
 print(verify_second_factor({'first_name':'Mildred','last_name':'Collins'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))         
 print(verify_second_factor({'first_name':'Mildred','last_name':'buttwater'},"I usually poop in CHESTERFIELD","defendant_city",'citations'))
 
+def extract_target_field(response,recordType):
+    if recordType=='Warrants':
+        fieldList=['Defendant','ZIP Code','Date of Birth','Case Number']
+        formatFieldList=[s.lower() for s in fieldList]
+    elif recordType=='citations':
+        fieldList=['id','citation_number','citation_date','first_name','last_name','date_of_birth','defendant_address','defendant_city','defendant_state','drivers_license_number','court_date','court_location','court_address']
+        lowerFieldList=[s.lower() for s in fieldList]
+        formatFieldList=[s.replace('_',' ') for s in lowerFieldList]
+    else:
+        return "Invalid record type"
+    #possibly record a correct match
+    match="NONE"        
+    for s in formatFieldList:
+        if response.find(s)>-1:    
+            match=s
+    return match
+    
+print(extract_target_field('oh damn that warrant and my date of birth','Warrants'))
+print(extract_target_field('oh damn that warrant and my date of birth','citations'))

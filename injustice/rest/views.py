@@ -21,6 +21,16 @@ def received_message(request):
 
     client.sms.messages.create(to=from_, from_="+14155992671", body="Gotcha message, d-boi!") 
 
+class WarrantsByName(generics.ListCreateAPIView):
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = WarrantSerializer
+
+    def get_queryset(self):
+        name = str(self.kwargs['name']).strip()
+
+        if name is not None:
+            return Warrants.objects.filter(defendant__icontains=name)
+
 class WarrantsByCaseNumber(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)
     serializer_class = WarrantSerializer
@@ -45,8 +55,8 @@ class CitationFuzzy(generics.ListCreateAPIView):
     serializer_class = CitationViolationSerializer 
 
     def get_queryset(self):
-        term1 = str(self.kwargs['term1'])
-        term2 = str(self.kwargs['term2'])
+        term1 = str(self.kwargs['term1']).strip()
+        term2 = str(self.kwargs['term2']).strip()
 
         if term1 is not None and term2 is not None:
             fields = [f for f in Citations._meta.fields if isinstance(f, CharField)]

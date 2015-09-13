@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q, CharField
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -19,6 +20,37 @@ def received_message(request):
     from_ = twilio_request.from_
 
     client.sms.messages.create(to=from_, from_="+14155992671", body="Gotcha message, d-boi!") 
+
+class ViolationByCitationNumber(generics.ListCreateAPIView):
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = ViolationSerializer
+
+    def get_queryset(self):
+        number = int(self.kwargs['citation_number'])
+
+        return Violations.objects.filter(citation_number=number)
+
+class CitationFuzzy(generics.ListCreateAPIView):
+    renderer_classes = (CustomJSONRenderer,)
+    serializer_class = CitationViolationSerializer 
+
+    def get_queryset(self):
+        term1 = str(self.kwargs['term1'])
+        term2 = str(self.kwargs['term2'])
+
+        if term1 is not None and term2 is not None:
+            fields = [f for f in Citations._meta.fields if isinstance(f, CharField)]
+            term1queries = [Q(**{f.name + '__icontains': term1}) for f in fields]
+            term2queries = [Q(**{f.name + '__icontains': term2}) for f in fields]
+
+            qs1 = Q()
+            for query in term1queries:
+                qs1 = qs1 | query
+            qs2 = Q()
+            for query in term2queries:
+                qs2 = qs2 | query
+
+            return Citations.objects.filter(qs1) & Citations.objects.filter(qs2)
 
 class CourtByAddress(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)

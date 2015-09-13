@@ -3,6 +3,24 @@ import csv
 import json
 import os
 
+#this is a helper function intended to be called by another function making a data call that produces a (pseudo) list of dictionaries    
+def match_in_list(requiredFields,pseudoList):
+    matches=[]
+    for citationDict in pseudoList:
+        #default is no match
+        match=0
+        for key in requiredFields.keys():
+            if requiredFields[key]==citationDict[key]:
+                match=1
+            else:
+                match=0
+        if match==1:
+            matches.append(citationDict)
+    if len(matches)>0:
+        return matches
+    else:
+        return "No match was found!"
+
 def get_court_id(lat,long):
     json_data=open(os.getcwd() + '/data/courts.geojson.txt').read()
     

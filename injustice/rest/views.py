@@ -13,16 +13,15 @@ from twilio.rest import TwilioRestClient
 from django_twilio.decorators import twilio_view
 import django_twilio.request as dt
 
-@csrf_exempt
 @twilio_view
-@require_http_methods(["POST"])
+@require_http_methods(["GET"])
 def received_message(request):
     client = TwilioRestClient()
 
-    body = request.POST.get('Body', '')
-    from_number = request.POST.get('From', '')
+    message = request.GET.get('Message', '')
+    from_number = request.GET.get('From', '')
 
-    client.sms.messages.create(to=from_number, from_="+14155992671", body=body) 
+    client.sms.messages.create(to=from_number, from_="+14155992671", body=message)
 
 class WarrantsByName(generics.ListCreateAPIView):
     renderer_classes = (CustomJSONRenderer,)

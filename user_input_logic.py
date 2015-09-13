@@ -7,26 +7,21 @@ import string
 def max_split(sentence):
     oldWords=[sentence]
     for mark in " "+string.punctuation:
-        print(oldWords)
         if mark not in '-\/':
-            print(mark)
             newWords=[]
             for word in oldWords:
                 newWords=newWords+word.split(mark)
-                print(newWords)
             oldWords=newWords
     #clean out the emptry string
     output=[]
     for t in oldWords:
         if t!='':
             output.append(t)
-    print(output)
     return output
         
 
 def inputted_name_permuter(nameString):
     finalOutput={'firstLast':[],'libraryStyle':[]}
-    print(max_split(nameString))
     for t in itertools.permutations(max_split(nameString),3):
         finalOutput['firstLast'].append({'first_name':t[0],'last_name':t[1]})
         finalOutput['libraryStyle'].append({'defendant':t[0]+', '+t[1]+' '+t[2][0]})
@@ -41,7 +36,6 @@ def get_citation_names():
     return [{'first_name':'mildred','last_name':'collins'}]    
 
 def verify_name(nameString,recordType):
-    nameString=max_split(nameString)
     if recordType=='Warrants':
         namesToCheck=get_warrant_names()
         potentialNames=inputted_name_permuter(nameString)['libraryStyle']
